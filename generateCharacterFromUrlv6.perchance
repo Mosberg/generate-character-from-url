@@ -2,6 +2,7 @@ loadDependencies = {import:ai-character-chat-dependencies-v1} // dexie.js, dompu
 aiTextPlugin = {import:ai-text-plugin}
 superFetch = {import:super-fetch-plugin}
 uploadPlugin = {import:upload-plugin}
+generatorStats = {import:generator-stats-plugin}
 
 async compressBlobWithGzip(blob) =>
 	const compressionStream = new CompressionStream("gzip");
