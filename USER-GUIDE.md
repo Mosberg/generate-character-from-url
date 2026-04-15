@@ -2,6 +2,8 @@
 
 This guide explains how to use Generate Character From URL v6 from start to finish, including every major feature, option, setting, workflow, and output mode.
 
+[Try it on Perchance](https://perchance.org/generate-character-from-url)
+
 If you want a technical developer reference, use README.md.
 This file is focused on practical user usage.
 
