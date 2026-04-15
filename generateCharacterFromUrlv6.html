@@ -463,6 +463,21 @@
     animation: rotate-jiggle 0.5s linear 6;
   }
 
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #777;
+  }
+
+  footer a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
   @keyframes rotate {
     0% {
       transform: rotate(0deg);
@@ -541,6 +556,9 @@
 <div class="pageShell">
   <section class="heroPanel">
     <div class="eyebrow">Standalone Perchance Generator</div>
+    <p>
+      This generator has been viewed by [generatorStats(null, "views")] people.
+    </p>
     <h1 class="heroTitle">Generate a roleplay character from any web page.</h1>
     <h3>
       Designed for seamless use with
@@ -560,6 +578,20 @@
       combined multi‑character Dexie export and global character/advanced
       settings that can be merged into every queued result.
     </p>
+    <br />
+    <a
+      href="https://github.com/Mosberg/generate-character-from-url/wiki/User-Guide"
+      target="_blank"
+      rel="noopener noreferrer"
+      >USER GUIDE
+    </a>
+    <br />
+    <a
+      href="https://github.com/Mosberg/generate-character-from-url/wiki/README"
+      target="_blank"
+      rel="noopener noreferrer"
+      >README
+    </a>
 
     <div class="inputStack">
       <div>
@@ -2107,6 +2139,72 @@
     els.statusBar.classList.remove("is-warning", "is-success");
     if (mode === "warning") els.statusBar.classList.add("is-warning");
     if (mode === "success") els.statusBar.classList.add("is-success");
+  }
+
+  function humanizeId(id) {
+    return (id || "")
+      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+      .replace(/[_\-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function getLabelTextForElement(element) {
+    if (!(element instanceof HTMLElement)) return "";
+
+    const wrappingLabelText = element.closest("label")?.textContent || "";
+    if (wrappingLabelText.trim()) return wrappingLabelText.trim();
+
+    if (!element.id) return "";
+    const label = document.querySelector(`label[for="${element.id}"]`);
+    return (label?.textContent || "").trim();
+  }
+
+  function applyHoverTips() {
+    const tooltipTargets = new Set([
+      ...document.querySelectorAll("[id]"),
+      ...document.querySelectorAll("button, input, textarea, select, summary"),
+    ]);
+
+    for (const element of tooltipTargets) {
+      if (!(element instanceof HTMLElement)) continue;
+      if ((element.getAttribute("title") || "").trim()) continue;
+
+      const explicitTip = (element.getAttribute("data-hover-tip") || "").trim();
+      const ariaLabel = (element.getAttribute("aria-label") || "").trim();
+      const labelText = getLabelTextForElement(element);
+      const placeholder = (element.getAttribute("placeholder") || "").trim();
+      const summaryText =
+        element.tagName === "SUMMARY" ? (element.textContent || "").trim() : "";
+      const buttonText =
+        element.tagName === "BUTTON" ? (element.textContent || "").trim() : "";
+      const selectedOptionText =
+        element.tagName === "SELECT"
+          ? (element.selectedOptions?.[0]?.textContent || "").trim()
+          : "";
+      const fallbackFromId = humanizeId(element.id);
+
+      const tip = [
+        explicitTip,
+        ariaLabel,
+        labelText,
+        placeholder,
+        summaryText,
+        buttonText,
+        selectedOptionText,
+        fallbackFromId,
+      ].find((value) => (value || "").trim());
+
+      if (!tip) continue;
+
+      const normalizedTip = tip
+        .replace(/\s+/g, " ")
+        .replace(/^[:\-\s]+|[:\-\s]+$/g, "")
+        .trim();
+      if (!normalizedTip) continue;
+
+      element.setAttribute("title", normalizedTip);
+    }
   }
 
   function saveRememberedInput(inputName, inputValue) {
@@ -5661,6 +5759,7 @@
   }
 
   restoreRememberedInputs();
+  applyHoverTips();
 
   ensureJson5().catch(console.error);
   rootRef.aiTextPlugin({ preload: true });
@@ -5677,3 +5776,15 @@
   updateFilenamePreview();
   maybeAutoRunFromQueryParams().catch(console.error);
 </script>
+
+<footer>
+  <p>
+    &copy; 2026
+    <a
+      href="https://github.com/Mosberg"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Mosberg</a
+    >. All rights reserved.
+  </p>
+</footer>
