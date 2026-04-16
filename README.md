@@ -6,7 +6,7 @@
 
 ### **A standalone Perchance generator that transforms URLs, cards, images, PDFs, and entire web pages into AI‑Character‑Chat‑ready Dexie JSON exports.**
 
-## Built for seamless integration with **[AI Character Chat](https://perchance.org/ai-character-chat)**
+## Built for seamless integration with: **[AI Character Chat](https://perchance.org/ai-character-chat)**
 
 ### **Automatically extract character data from any source — with direct card importing, site‑specific scrapers, PDF parsing, avatar handling, readability fallback, and optional custom instructions.**
 
